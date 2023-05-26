@@ -9,6 +9,20 @@
 </head>
 <body>
     <img src="#">
+    <div class="userInputContainer">
+        <select id="weatherType">
+            <option value="past">Past</option>
+            <option value="current">Current</option>
+            <option value="future">Future</option>
+        </select>
+        <input type="number" id="weatherDays">
+        <input type="text" id="weatherLocation">
+        <select id="temperatureSelector" onchange="getInputs()">
+            <option value="f">Fahrenheit</option>
+            <option value="c">Celsius</option>
+        </select>
+        <button id="refreshData">Refresh</button>
+    </div>
     <div class="weatherContainer">
         <div class="weatherDataItem">
             <div>one</div>
@@ -24,10 +38,14 @@
         <div class="weatherDataItem">eight</div>
         <div class="weatherDataItem">nine</div>
         <div class="weatherDataItem">ten</div>
+        <div class="weatherDataItem">eleven</div>
+        <div class="weatherDataItem">twelve</div>
+        <div class="weatherDataItem">thirteen</div>
+        <div class="weatherDataItem">fourteen</div>
     </div>
     <!-- add buttons for past weather, current weather, and forecast -->
     <!-- add inputs for location, days (if current is not selected), and temperature format -->
-    <!-- need to find format to display all the info -->
+        <!-- need to find format to display all the info -->
     <script src="script.js"></script>
 </body>
 </html>

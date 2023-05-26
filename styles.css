@@ -2,6 +2,10 @@ body {
     background-color:darkslategrey;
 }
 
+.userInputContainer {
+    display: grid;
+}
+
 .weatherContainer {
     background-color: lightgrey;
     display: flex;
@@ -16,7 +20,11 @@ body {
     display: grid;
     justify-content: center;
     height: 150px;
-    width: max(150px, 13vw);
+    width: max(100px, 12.5vw);
     border: 2px solid darkgray;
     border-radius: 5px;
+}
+
+img {
+    width: 32px;
 }

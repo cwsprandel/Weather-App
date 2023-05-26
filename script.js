@@ -1,7 +1,6 @@
 const img = document.querySelector('img');
 
-
-async function getWeather(units, days, location) {
+async function getWeather(units, days, location, type) {
     if (location) {
         locationString = location;     
     } else {
@@ -13,19 +12,37 @@ async function getWeather(units, days, location) {
     const weatherData = await response.json();
     const currentWeather = weatherData.current;
     console.log(weatherData);
+    console.log(units);
+    //console.log(fetchString);
 
     if (units === 'f') {
         currentTemp = currentWeather.temp_f;
     } else if(units === 'c') {
         currentTemp = currentWeather.temp_c;
     } else {
-        console.log('please enter a correct unit');
+        currentTemp = currentWeather.temp_f;
     }
     
     img.src = currentWeather.condition.icon;
 };
 
-getWeather('f', 3, 'Houston');
+
+const weatherTypeElement = document.getElementById("weatherType");
+const weatherDaysElement = document.getElementById("weatherDays");
+const weatherLocationElement = document.getElementById("weatherLocation");
+const temperatureSelector = document.getElementById("temperatureSelector");
+
+const refreshButton = document.getElementById("refreshData");
+refreshButton.addEventListener("click", () => {
+    getInputs();
+})
+
+function getInputs() {
+    let weatherType = weatherTypeElement.value;
+    let weatherDays = weatherDaysElement.value;
+    let weatherLocation = weatherLocationElement.value;
+    console.log("type: " + weatherType + " - days: " + weatherDays + " - location: " + weatherLocation);
+}
 
 
 
