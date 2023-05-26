@@ -23,8 +23,40 @@ body {
     width: max(100px, 12.5vw);
     border: 2px solid darkgray;
     border-radius: 5px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: 
+    "icon" "icon"
+    "lowLabel" "highLabel"
+    "low" "high"
+    "humidity" "humidity"
+    "rain" "rain";
 }
 
-img {
+.weatherIcon {
     width: 32px;
+    grid-area: "icon";
+}
+
+.lowTempLabel {
+    grid-area: "lowLabel"
+}
+
+.highTempLabel {
+    grid-area: "highLabel";
+}
+
+.lowTemp {
+    grid-area: "low";
+}
+
+.highTemp {
+    grid-area: "high";
+}
+
+.humidity {
+    grid-area: "humidity";
+}
+
+.rain {
+    grid-area: "rain";
 }

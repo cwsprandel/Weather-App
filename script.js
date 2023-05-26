@@ -26,6 +26,7 @@ async function getWeather(units, days, location, type) {
     img.src = currentWeather.condition.icon;
 };
 
+getWeather('f', 3, 77396)
 
 const weatherTypeElement = document.getElementById("weatherType");
 const weatherDaysElement = document.getElementById("weatherDays");
@@ -41,10 +42,33 @@ function getInputs() {
     let weatherType = weatherTypeElement.value;
     let weatherDays = weatherDaysElement.value;
     let weatherLocation = weatherLocationElement.value;
-    console.log("type: " + weatherType + " - days: " + weatherDays + " - location: " + weatherLocation);
 }
 
+function createWeatherCard() {
+    const weatherDataItem = document.createElement("div");
+    weatherDataItem.setAttribute("class", "weatherDataItem");
 
+    const weatherIcon = document.createElement("img");
+    weatherIcon.setAttribute("class", "weatherIcon");
+
+    const lowTempLabel = document.createElement("h2");
+    lowTempLabel.setAttribute("class", "lowTempLabel");
+
+    const highTempLabel = document.createElement("h2");
+    highTempLabel.setAttribute("class", "highTempLabel");
+
+    const lowTemp = document.createElement("h1");
+    lowTemp.setAttribute("class", "lowTemp");
+
+    const highTemp = document.createElement("h1");
+    highTemp.setAttribute("class", "highTemp");
+
+    const humidity = document.createElement("p");
+    humidity.setAttribute("class", "humidity");
+
+    const rain = document.createElement("p");
+    rain.setAttribute("class", "rain");
+}
 
 // the code below can print out from an async function. may not need this??
 // (async () => {
