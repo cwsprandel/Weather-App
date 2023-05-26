@@ -1,12 +1,20 @@
 const img = document.querySelector('img');
 
 
-async function getWeather(units) {
-    let fetchString = 'http://api.weatherapi.com/v1/forecast.json?key=dfaaf2e6c86e418fa46122345231105&q=Houston&days=5&aqi=yes&alerts=yes';
+async function getForecast(units, days, location) {
+    if (location) {
+        locationString = location;     
+    } else {
+        locationString = 'auto:ip';
+    }
+    let forecastInt = days;
+    let fetchString = `http://api.weatherapi.com/v1/forecast.json?key=dfaaf2e6c86e418fa46122345231105&q=${locationString}&days=${forecastInt}&aqi=yes&alerts=yes`;
     const response = await fetch(fetchString, {mode: 'cors'});
     const weatherData = await response.json();
     const currentWeather = weatherData.current;
     console.log(weatherData);
+    console.log(locationString);
+    console.log(fetchString);
 
     if (units === 'f') {
         currentTemp = currentWeather.temp_f;
@@ -25,4 +33,4 @@ async function getWeather(units) {
 //     console.log((await getWeather()).weatherData.current.temp_f)
 // })()
 
-getWeather('c');
+getForecast('f', 2);
