@@ -13,8 +13,6 @@ async function getForecast(units, days, location) {
     const weatherData = await response.json();
     const currentWeather = weatherData.current;
     console.log(weatherData);
-    console.log(locationString);
-    console.log(fetchString);
 
     if (units === 'f') {
         currentTemp = currentWeather.temp_f;
@@ -33,4 +31,4 @@ async function getForecast(units, days, location) {
 //     console.log((await getWeather()).weatherData.current.temp_f)
 // })()
 
-getForecast('f', 2);
+getForecast('f', 3, 'Houston');
