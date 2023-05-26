@@ -1,3 +1,21 @@
 body {
     background-color:darkslategrey;
 }
+
+.weatherContainer {
+    background-color: lightgrey;
+    display: flex;
+    flex-flow: row wrap;
+    row-gap: 10px;
+    justify-items: center;
+    justify-content: space-around;
+}
+
+.weatherDataItem {
+    display: grid;
+    justify-content: center;
+    height: 150px;
+    width: max(150px, 13vw);
+    border: 2px solid darkgray;
+    border-radius: 5px;
+}
