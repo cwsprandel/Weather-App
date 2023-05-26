@@ -7,8 +7,9 @@ body {
     display: flex;
     flex-flow: row wrap;
     row-gap: 10px;
+    column-gap: 1vw;
     justify-items: center;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .weatherDataItem {
