@@ -18,45 +18,56 @@ body {
 
 .weatherDataItem {
     display: grid;
+    background-color:lightslategray;
     justify-content: center;
+    justify-items: center;
     height: 150px;
     width: max(100px, 12.5vw);
     border: 2px solid darkgray;
     border-radius: 5px;
+    margin: 0;
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas: 
-    "icon" "icon"
-    "lowLabel" "highLabel"
-    "low" "high"
-    "humidity" "humidity"
-    "rain" "rain";
+    "weathericon weathericon"
+    "lowLabel highLabel"
+    "low high"
+    "humidity humidity"
+    "rain rain";
 }
 
 .weatherIcon {
-    width: 32px;
-    grid-area: "icon";
+    grid-area: weathericon;
+    width: 36px;
 }
 
 .lowTempLabel {
-    grid-area: "lowLabel"
+    grid-area: lowLabel;
+    font-size: 20px;
 }
 
 .highTempLabel {
-    grid-area: "highLabel";
+    grid-area: highLabel;
+    font-size: 20px;
 }
 
 .lowTemp {
-    grid-area: "low";
+    grid-area: low;
+    font-size: 20px;
 }
 
 .highTemp {
-    grid-area: "high";
+    grid-area: high;
+    font-size: 20px;
 }
 
 .humidity {
-    grid-area: "humidity";
+    grid-area: humidity;
 }
 
 .rain {
-    grid-area: "rain";
+    grid-area: rain;
+}
+
+h2, p {
+    margin: 0;
 }
