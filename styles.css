@@ -21,7 +21,7 @@ body {
     background-color:lightslategray;
     justify-content: center;
     justify-items: center;
-    height: 150px;
+    height: 50vh;
     width: max(100px, 12.5vw);
     border: 2px solid darkgray;
     border-radius: 5px;
