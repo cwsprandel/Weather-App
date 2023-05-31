@@ -1,15 +1,24 @@
 const img = document.querySelector('img');
 
 async function getWeather(units, days, location, type) {
+    //check if a location was passed in
+    //if no location, default to auto:ip which uses the current location of ip address
     if (location) {
         locationString = location;     
     } else {
         locationString = 'auto:ip';
     }
+    //setting the number of days to a variable
+//will need to modify to work with past weather data
     let forecastInt = days;
+    //create fetch string for api call
     let fetchString = `http://api.weatherapi.com/v1/forecast.json?key=dfaaf2e6c86e418fa46122345231105&q=${locationString}&days=${forecastInt}&aqi=yes&alerts=yes`;
     const response = await fetch(fetchString, {mode: 'cors'});
+
+    //THIS IS THE WEATHER DATA FOR FORECAST AND CURRENT
     const weatherData = await response.json();
+
+
     const currentWeather = weatherData.current;
     console.log(weatherData);
     console.log(weatherData.forecast.forecastday[0].date);
@@ -21,18 +30,18 @@ async function getWeather(units, days, location, type) {
 
     if (units === 'f') {
         currentTemp = currentWeather.temp_f;
+        tempSymbol = "F"
     } else if(units === 'c') {
         currentTemp = currentWeather.temp_c;
+        tempSymbol = "C"
     } else {
         currentTemp = currentWeather.temp_f;
+        tempSymbol = "F"
     }
     
-    createWeatherCardCurrent(weatherData, currentTemp);
-
-    //let weatherObject = {icon: currentWeather.condition.icon, lowTemperature: weatherData.forecast.forecastday[0].day.mintemp_f, highTemperature: weatherData.forecast.forecastday[0].day.maxtemp_f, humidity: currentWeather.humidity, chanceOfRain: weatherData.forecast.forecastday[0].day.daily_chance_of_rain}
-    //createWeatherCard(weatherObject);
-
-    img.src = currentWeather.condition.icon;
+    //calls function to create a weather card with the current weather
+    //passes in the weather data object and current temp in the specified format
+    createWeatherCardCurrent(weatherData, currentTemp, tempSymbol);
 };
 
 getWeather('f', 3, 77396)
@@ -57,7 +66,7 @@ function getInputs() {
     getWeather(weatherUnits, weatherDays, weatherLocation, weatherType);
 }
 
-function createWeatherCardCurrent(weatherObject, currentTemp) {
+function createWeatherCardCurrent(weatherObject, currentTemp, tempSymbol) {
     console.log(weatherObject);
     const weatherContainer = document.getElementById("weatherContainer");
 
@@ -82,7 +91,58 @@ function createWeatherCardCurrent(weatherObject, currentTemp) {
 
     const lowTemp = document.createElement("h2");
     lowTemp.setAttribute("class", "lowTemp");
-    lowTemp.textContent = currentTemp;
+    lowTemp.textContent = currentTemp + "\u00B0" + tempSymbol;
+
+    const highTemp = document.createElement("h2");
+    highTemp.setAttribute("class", "highTemp");
+    highTemp.textContent = weatherObject.highTemperature;
+
+    const humidity = document.createElement("p");
+    humidity.setAttribute("class", "humidity");
+    humidity.textContent = "Humidity: " + weatherObject.current.humidity + "%";
+
+    const rain = document.createElement("p");
+    rain.setAttribute("class", "rain");
+    rain.textContent = "Rain: " + weatherObject + "%";
+
+    weatherDataItem.appendChild(weatherDate);
+    weatherDataItem.appendChild(weatherIcon);
+    weatherDataItem.appendChild(lowTempLabel);
+    weatherDataItem.appendChild(highTempLabel);
+    weatherDataItem.appendChild(lowTemp);
+    weatherDataItem.appendChild(highTemp);
+    weatherDataItem.appendChild(humidity);
+    weatherDataItem.appendChild(rain);
+    weatherContainer.appendChild(weatherDataItem);
+}
+
+//use the below code for FORECAST and HISTORY weather cards
+function createWeatherCard(weatherObject, currentTemp, tempSymbol) {
+    console.log(weatherObject);
+    const weatherContainer = document.getElementById("weatherContainer");
+
+    const weatherDataItem = document.createElement("div");
+    weatherDataItem.setAttribute("class", "weatherDataItem");
+
+    const weatherDate = document.createElement("h2");
+    weatherDate.setAttribute("class", "weatherDate");
+    weatherDate.textContent = weatherObject.forecast.forecastday[0].date;
+
+    const weatherIcon = document.createElement("img");
+    weatherIcon.setAttribute("class", "weatherIcon");
+    weatherIcon.src = weatherObject.current.condition.icon;
+
+    const lowTempLabel = document.createElement("h2");
+    lowTempLabel.setAttribute("class", "lowTempLabel");
+    lowTempLabel.textContent = "Low (Current Temp)";
+
+    const highTempLabel = document.createElement("h2");
+    highTempLabel.setAttribute("class", "highTempLabel");
+    highTempLabel.textContent = "High";
+
+    const lowTemp = document.createElement("h2");
+    lowTemp.setAttribute("class", "lowTemp");
+    lowTemp.textContent = currentTemp + "\u00B0" + tempSymbol;
 
     const highTemp = document.createElement("h2");
     highTemp.setAttribute("class", "highTemp");
