@@ -12,8 +12,12 @@ async function getWeather(units, days, location, type) {
     const weatherData = await response.json();
     const currentWeather = weatherData.current;
     console.log(weatherData);
-    console.log(units);
-    //console.log(fetchString);
+    console.log(weatherData.forecast.forecastday[0].date);
+
+    let weathercurrentdate = weatherData.current.last_updated;
+
+    let currentDate = new Date(weathercurrentdate);
+    console.log(currentDate.toDateString());
 
     if (units === 'f') {
         currentTemp = currentWeather.temp_f;
@@ -23,8 +27,10 @@ async function getWeather(units, days, location, type) {
         currentTemp = currentWeather.temp_f;
     }
     
-    let weatherObject = {icon: currentWeather.condition.icon, lowTemperature: weatherData.forecast.forecastday[0].day.mintemp_f, highTemperature: weatherData.forecast.forecastday[0].day.maxtemp_f, humidity: currentWeather.humidity, chanceOfRain: weatherData.forecast.forecastday[0].day.daily_chance_of_rain}
-    createWeatherCard(weatherObject);
+    createWeatherCardCurrent(weatherData, currentTemp);
+
+    //let weatherObject = {icon: currentWeather.condition.icon, lowTemperature: weatherData.forecast.forecastday[0].day.mintemp_f, highTemperature: weatherData.forecast.forecastday[0].day.maxtemp_f, humidity: currentWeather.humidity, chanceOfRain: weatherData.forecast.forecastday[0].day.daily_chance_of_rain}
+    //createWeatherCard(weatherObject);
 
     img.src = currentWeather.condition.icon;
 };
@@ -39,28 +45,36 @@ const temperatureSelector = document.getElementById("temperatureSelector");
 const refreshButton = document.getElementById("refreshData");
 refreshButton.addEventListener("click", () => {
     //getInputs();
-    createWeatherCard();
+    createWeatherCardCurrent();
 })
 
 function getInputs() {
     let weatherType = weatherTypeElement.value;
     let weatherDays = weatherDaysElement.value;
     let weatherLocation = weatherLocationElement.value;
+    let weatherUnits = temperatureSelector.value;
+
+    getWeather(weatherUnits, weatherDays, weatherLocation, weatherType);
 }
 
-function createWeatherCard(weatherObject) {
+function createWeatherCardCurrent(weatherObject, currentTemp) {
+    console.log(weatherObject);
     const weatherContainer = document.getElementById("weatherContainer");
 
     const weatherDataItem = document.createElement("div");
     weatherDataItem.setAttribute("class", "weatherDataItem");
 
+    const weatherDate = document.createElement("h2");
+    weatherDate.setAttribute("class", "weatherDate");
+    weatherDate.textContent = weatherObject.forecast.forecastday[0].date;
+
     const weatherIcon = document.createElement("img");
     weatherIcon.setAttribute("class", "weatherIcon");
-    weatherIcon.src = weatherObject.icon;
+    weatherIcon.src = weatherObject.current.condition.icon;
 
     const lowTempLabel = document.createElement("h2");
     lowTempLabel.setAttribute("class", "lowTempLabel");
-    lowTempLabel.textContent = "Low";
+    lowTempLabel.textContent = "Low (Current Temp)";
 
     const highTempLabel = document.createElement("h2");
     highTempLabel.setAttribute("class", "highTempLabel");
@@ -68,7 +82,7 @@ function createWeatherCard(weatherObject) {
 
     const lowTemp = document.createElement("h2");
     lowTemp.setAttribute("class", "lowTemp");
-    lowTemp.textContent = weatherObject.lowTemperature;
+    lowTemp.textContent = currentTemp;
 
     const highTemp = document.createElement("h2");
     highTemp.setAttribute("class", "highTemp");
@@ -76,12 +90,13 @@ function createWeatherCard(weatherObject) {
 
     const humidity = document.createElement("p");
     humidity.setAttribute("class", "humidity");
-    humidity.textContent = "Humidity: " + weatherObject.humidity + "%";
+    humidity.textContent = "Humidity: " + weatherObject.current.humidity + "%";
 
     const rain = document.createElement("p");
     rain.setAttribute("class", "rain");
-    rain.textContent = "Rain: " + weatherObject.chanceOfRain + "%";
+    rain.textContent = "Rain: " + weatherObject + "%";
 
+    weatherDataItem.appendChild(weatherDate);
     weatherDataItem.appendChild(weatherIcon);
     weatherDataItem.appendChild(lowTempLabel);
     weatherDataItem.appendChild(highTempLabel);

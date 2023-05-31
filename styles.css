@@ -28,6 +28,7 @@ body {
     margin: 0;
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas: 
+    "date date"
     "weathericon weathericon"
     "lowLabel highLabel"
     "low high"
@@ -38,6 +39,10 @@ body {
 .weatherIcon {
     grid-area: weathericon;
     width: 36px;
+}
+
+.weatherDate {
+    grid-area: date;
 }
 
 .lowTempLabel {
@@ -68,6 +73,11 @@ body {
     grid-area: rain;
 }
 
-h2, p {
+h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+p {
     margin: 0;
 }
