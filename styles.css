@@ -38,10 +38,11 @@ body {
 
 .weatherIcon {
     grid-area: weathericon;
-    width: 36px;
+    width: 64px;
 }
 
 .weatherDate {
+    margin-top: 10px;
     grid-area: date;
 }
 
@@ -57,12 +58,12 @@ body {
 
 .lowTemp {
     grid-area: low;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .highTemp {
     grid-area: high;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .humidity {

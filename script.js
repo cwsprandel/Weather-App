@@ -1,6 +1,6 @@
 const img = document.querySelector('img');
 
-async function getWeather(units, days, location, type) {
+async function getWeather(location, units) {
     //check if a location was passed in
     //if no location, default to auto:ip which uses the current location of ip address
     if (location) {
@@ -8,82 +8,77 @@ async function getWeather(units, days, location, type) {
     } else {
         locationString = 'auto:ip';
     }
-    //setting the number of days to a variable
-//will need to modify to work with past weather data
-    let forecastInt = days;
     //create fetch string for api call
-    let fetchString = `http://api.weatherapi.com/v1/forecast.json?key=dfaaf2e6c86e418fa46122345231105&q=${locationString}&days=${forecastInt}&aqi=yes&alerts=yes`;
+    let fetchString = `http://api.weatherapi.com/v1/forecast.json?key=dfaaf2e6c86e418fa46122345231105&q=${locationString}&days=3&aqi=yes&alerts=yes`;
     const response = await fetch(fetchString, {mode: 'cors'});
 
-    //THIS IS THE WEATHER DATA FOR FORECAST AND CURRENT
+    //THIS IS THE WEATHER DATA OBJECT 
     const weatherData = await response.json();
 
-
-    const currentWeather = weatherData.current;
-    console.log(weatherData);
-    console.log(weatherData.forecast.forecastday[0].date);
-
-    let weathercurrentdate = weatherData.current.last_updated;
-
-    let currentDate = new Date(weathercurrentdate);
-    console.log(currentDate.toDateString());
-
-    if (units === 'f') {
-        currentTemp = currentWeather.temp_f;
-        tempSymbol = "F"
-    } else if(units === 'c') {
-        currentTemp = currentWeather.temp_c;
-        tempSymbol = "C"
-    } else {
-        currentTemp = currentWeather.temp_f;
-        tempSymbol = "F"
+    //clear the weather container before adding more stuff
+    if (weatherData) {
+        weatherContainer.innerHTML = "";
     }
-    
-    //calls function to create a weather card with the current weather
-    //passes in the weather data object and current temp in the specified format
-    createWeatherCardCurrent(weatherData, currentTemp, tempSymbol);
+    console.log(weatherData);
+
+    for (let index = 0; index < weatherData.forecast.forecastday.length; index++) {
+        let element = weatherData.forecast.forecastday[index];
+        
+        if (units === 'f') {
+            highTemp = element.day.maxtemp_f;
+            lowTemp = element.day.mintemp_f;
+            tempSymbol = "F"
+        } else if(units === 'c') {
+            highTemp = element.day.maxtemp_c;
+            lowTemp = element.day.mintemp_c;
+            tempSymbol = "C"
+        } else {
+            highTemp = element.day.maxtemp_f;
+            lowTemp = element.day.mintemp_f;
+            tempSymbol = "F"
+        }
+
+        createWeatherCard(element, lowTemp, highTemp, tempSymbol);
+    }
 };
 
-getWeather('f', 3, 77396)
+getWeather(77396, 'f')
 
-const weatherTypeElement = document.getElementById("weatherType");
-const weatherDaysElement = document.getElementById("weatherDays");
+//global variables for the location input and temperature selector 
 const weatherLocationElement = document.getElementById("weatherLocation");
 const temperatureSelector = document.getElementById("temperatureSelector");
+//weather Container for all of the weather cards
+const weatherContainer = document.getElementById("weatherContainer");
 
+//code to run when the refresh button is clicked. 
+//MAY GET RID OF THIS!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!?!
 const refreshButton = document.getElementById("refreshData");
 refreshButton.addEventListener("click", () => {
-    //getInputs();
-    createWeatherCardCurrent();
+    getInputs();
 })
 
 function getInputs() {
-    let weatherType = weatherTypeElement.value;
-    let weatherDays = weatherDaysElement.value;
     let weatherLocation = weatherLocationElement.value;
     let weatherUnits = temperatureSelector.value;
 
-    getWeather(weatherUnits, weatherDays, weatherLocation, weatherType);
+    getWeather(weatherLocation, weatherUnits);
 }
 
-function createWeatherCardCurrent(weatherObject, currentTemp, tempSymbol) {
-    console.log(weatherObject);
-    const weatherContainer = document.getElementById("weatherContainer");
-
+function createWeatherCard(weatherObject, lowTempVal, highTempVal, tempSymbol) {
     const weatherDataItem = document.createElement("div");
     weatherDataItem.setAttribute("class", "weatherDataItem");
 
     const weatherDate = document.createElement("h2");
     weatherDate.setAttribute("class", "weatherDate");
-    weatherDate.textContent = weatherObject.forecast.forecastday[0].date;
+    weatherDate.textContent = weatherObject.date;
 
     const weatherIcon = document.createElement("img");
     weatherIcon.setAttribute("class", "weatherIcon");
-    weatherIcon.src = weatherObject.current.condition.icon;
+    weatherIcon.src = weatherObject.day.condition.icon;
 
     const lowTempLabel = document.createElement("h2");
     lowTempLabel.setAttribute("class", "lowTempLabel");
-    lowTempLabel.textContent = "Low (Current Temp)";
+    lowTempLabel.textContent = "Low";
 
     const highTempLabel = document.createElement("h2");
     highTempLabel.setAttribute("class", "highTempLabel");
@@ -91,19 +86,19 @@ function createWeatherCardCurrent(weatherObject, currentTemp, tempSymbol) {
 
     const lowTemp = document.createElement("h2");
     lowTemp.setAttribute("class", "lowTemp");
-    lowTemp.textContent = currentTemp + "\u00B0" + tempSymbol;
+    lowTemp.textContent = lowTempVal + "\u00B0" + tempSymbol;
 
     const highTemp = document.createElement("h2");
     highTemp.setAttribute("class", "highTemp");
-    highTemp.textContent = weatherObject.highTemperature;
+    highTemp.textContent = highTempVal + "\u00B0" + tempSymbol;
 
     const humidity = document.createElement("p");
     humidity.setAttribute("class", "humidity");
-    humidity.textContent = "Humidity: " + weatherObject.current.humidity + "%";
+    humidity.textContent = "Humidity: " + weatherObject.day.avghumidity + "%";
 
     const rain = document.createElement("p");
     rain.setAttribute("class", "rain");
-    rain.textContent = "Rain: " + weatherObject + "%";
+    rain.textContent = "Rain: " + weatherObject.day.daily_chance_of_rain + "%";
 
     weatherDataItem.appendChild(weatherDate);
     weatherDataItem.appendChild(weatherIcon);
@@ -116,56 +111,7 @@ function createWeatherCardCurrent(weatherObject, currentTemp, tempSymbol) {
     weatherContainer.appendChild(weatherDataItem);
 }
 
-//use the below code for FORECAST and HISTORY weather cards
-function createWeatherCard(weatherObject, currentTemp, tempSymbol) {
-    console.log(weatherObject);
-    const weatherContainer = document.getElementById("weatherContainer");
 
-    const weatherDataItem = document.createElement("div");
-    weatherDataItem.setAttribute("class", "weatherDataItem");
-
-    const weatherDate = document.createElement("h2");
-    weatherDate.setAttribute("class", "weatherDate");
-    weatherDate.textContent = weatherObject.forecast.forecastday[0].date;
-
-    const weatherIcon = document.createElement("img");
-    weatherIcon.setAttribute("class", "weatherIcon");
-    weatherIcon.src = weatherObject.current.condition.icon;
-
-    const lowTempLabel = document.createElement("h2");
-    lowTempLabel.setAttribute("class", "lowTempLabel");
-    lowTempLabel.textContent = "Low (Current Temp)";
-
-    const highTempLabel = document.createElement("h2");
-    highTempLabel.setAttribute("class", "highTempLabel");
-    highTempLabel.textContent = "High";
-
-    const lowTemp = document.createElement("h2");
-    lowTemp.setAttribute("class", "lowTemp");
-    lowTemp.textContent = currentTemp + "\u00B0" + tempSymbol;
-
-    const highTemp = document.createElement("h2");
-    highTemp.setAttribute("class", "highTemp");
-    highTemp.textContent = weatherObject.highTemperature;
-
-    const humidity = document.createElement("p");
-    humidity.setAttribute("class", "humidity");
-    humidity.textContent = "Humidity: " + weatherObject.current.humidity + "%";
-
-    const rain = document.createElement("p");
-    rain.setAttribute("class", "rain");
-    rain.textContent = "Rain: " + weatherObject + "%";
-
-    weatherDataItem.appendChild(weatherDate);
-    weatherDataItem.appendChild(weatherIcon);
-    weatherDataItem.appendChild(lowTempLabel);
-    weatherDataItem.appendChild(highTempLabel);
-    weatherDataItem.appendChild(lowTemp);
-    weatherDataItem.appendChild(highTemp);
-    weatherDataItem.appendChild(humidity);
-    weatherDataItem.appendChild(rain);
-    weatherContainer.appendChild(weatherDataItem);
-}
 
 // the code below can print out from an async function. may not need this??
 // (async () => {
