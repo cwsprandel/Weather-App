@@ -9,7 +9,7 @@ async function getWeather(location, units) {
         locationString = 'auto:ip';
     }
     //create fetch string for api call
-    let fetchString = `http://api.weatherapi.com/v1/forecast.json?key=dfaaf2e6c86e418fa46122345231105&q=${locationString}&days=3&aqi=yes&alerts=yes`;
+    let fetchString = `https://api.weatherapi.com/v1/forecast.json?key=dfaaf2e6c86e418fa46122345231105&q=${locationString}&days=3&aqi=yes&alerts=yes`;
     const response = await fetch(fetchString, {mode: 'cors'});
 
     //THIS IS THE WEATHER DATA OBJECT 
